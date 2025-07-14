@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Ruta de IA - Lisotosoft S.A.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A single-page application with top navigation to switch between four key sections: Visión General, Pilares de Aplicación, Hoja de Ruta, and Consideraciones Clave. This modular, tab-based structure transforms the linear essay into an explorable dashboard. The "Pilares" section uses interactive cards to detail strategic areas. The "Hoja de Ruta" features an interactive timeline chart. The "Consideraciones" uses an accordion to present challenges. This design prioritizes user-guided exploration and information synthesis over passive reading, making the strategic plan more accessible and engaging for stakeholders at Lisotosoft S.A. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Strategic Pillars (Operations, Products, Commercial). -> Goal: Organize & Inform. -> Viz/Method: Interactive HTML/CSS cards with icons. -> Interaction: User clicks on a pillar's sub-item to dynamically display its detailed description. -> Justification: Breaks down the core strategy into clear, digestible, and interactive components, preventing information overload. -> Library/Method: Vanilla JS DOM manipulation.
+        2. Report Info: Implementation Timeline (3 Phases). -> Goal: Visualize Change & Duration. -> Viz/Method: Chart.js horizontal bar chart emulating a Gantt chart. -> Interaction: Clicking on a chart segment or its corresponding label highlights it and displays detailed phase information. -> Justification: Provides a clear, quantitative, and engaging visual representation of the project timeline, which is more effective than a static list. -> Library/Method: Chart.js.
+        3. Report Info: Challenges & Ethics (Privacy, Bias, Workforce). -> Goal: Organize & Detail. -> Viz/Method: HTML/CSS/JS accordion. -> Interaction: User clicks a topic to expand and view its content. -> Justification: Neatly organizes critical but dense information, allowing users to focus on one challenge at a time. -> Library/Method: Vanilla JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4; /* Warm Neutral Background */
+            color: #2c3e50;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            border-bottom: 4px solid transparent;
+        }
+        .nav-button.active {
+            border-bottom-color: #3b82f6; /* Accent Color */
+            color: #3b82f6;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .accordion-header {
+            transition: background-color 0.3s ease;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px;
+            max-height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 300px;
+                max-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Transformando Lisotosoft S.A.</h1>
+            <p class="text-xl text-gray-600 mt-2">Una Hoja de Ruta Interactiva para la Integración de la Inteligencia Artificial</p>
+        </header>
+
+        <nav class="flex justify-center border-b border-gray-200 mb-8">
+            <button data-view="vision" class="nav-button active text-lg font-semibold px-6 py-4">Visión General</button>
+            <button data-view="pilares" class="nav-button text-lg font-semibold px-6 py-4">Pilares de Aplicación</button>
+            <button data-view="hoja" class="nav-button text-lg font-semibold px-6 py-4">Hoja de Ruta</button>
+            <button data-view="consideraciones" class="nav-button text-lg font-semibold px-6 py-4">Consideraciones Clave</button>
+        </nav>
+
+        <main id="content-area">
+        </main>
+
+    </div>
+
+    <script>
+        const contentData = {
+            vision: {
+                title: 'La Frontera Digital y la Oportunidad Estratégica',
+                content: `
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <p class="text-lg text-gray-700 leading-relaxed mb-6">En el dinámico ecosistema empresarial del siglo XXI, la Inteligencia Artificial (IA) ha trascendido el ámbito de la ciencia ficción para convertirse en un pilar fundamental de la innovación y la eficiencia. Para una empresa con visión de futuro como Lisotosoft S.A., adoptar la IA no es simplemente una actualización tecnológica, sino una decisión estratégica crucial que puede redefinir su posición en el mercado, optimizar sus operaciones y desbloquear nuevas fuentes de valor.</p>
+                        <blockquote class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 text-gray-800">
+                            <p class="font-semibold text-xl">La integración de la IA representa la oportunidad de catalizar una transformación profunda que resultará en una mayor eficiencia operativa, productos más innovadores y una ventaja competitiva sostenible.</p>
+                        </blockquote>
+                        <p class="text-lg text-gray-700 leading-relaxed mt-6">Esta aplicación interactiva explora una hoja de ruta conceptual para la implementación de la IA en Lisotosoft S.A., delineando áreas clave de aplicación, un plan por fases y las consideraciones indispensables para un crecimiento responsable.</p>
+                    </div>
+                `
+            },
+            pilares: {
+                title: 'Áreas Clave para la Aplicación de IA',
+                intro: 'La versatilidad de la IA permite su aplicación en prácticamente todos los departamentos. Esta sección detalla los tres pilares estratégicos donde Lisotosoft S.A. puede aplicar la IA para generar el máximo impacto. Haga clic en cada iniciativa para ver su descripción.',
+                items: [
+                    { 
+                        pillar: 'Optimización de Operaciones Internas', 
+                        icon: '⚙️',
+                        description: 'Utilizar la IA para hacer que la propia empresa funcione de manera más inteligente y eficiente.',
+                        sub_items: [
+                            { title: 'Automatización Inteligente', detail: 'Combinar RPA con IA para automatizar tareas complejas en Finanzas, RR.HH. y Administración, liberando al talento humano para roles estratégicos.'},
+                            { title: 'Soporte de TI Predictivo', detail: 'Implementar un help desk con IA para resolución instantánea y algoritmos que predigan fallos de infraestructura antes de que ocurran.'},
+                            { title: 'Gestión y Desarrollo de Talento', detail: 'Analizar competencias del equipo, identificar brechas de habilidades y recomendar planes de formación personalizados para cada empleado.'},
+                        ]
+                    },
+                    { 
+                        pillar: 'Evolución de Productos y Servicios', 
+                        icon: '🚀',
+                        description: 'Como empresa de software, el núcleo de Lisotosoft S.A. puede ser radicalmente mejorado con IA.',
+                        sub_items: [
+                            { title: 'Desarrollo Asistido por IA', detail: 'Integrar herramientas como asistentes de codificación en el ciclo de desarrollo para acelerar la programación y automatizar la detección de bugs.'},
+                            { title: 'Funcionalidades Inteligentes', detail: 'Enriquecer los productos de Lisotosoft con capacidades de IA, como análisis predictivo y automatización de tareas complejas para clientes.'},
+                            { title: 'Hiper-personalización de UX', detail: 'Usar aprendizaje automático para analizar la interacción del usuario y adaptar dinámicamente la interfaz para una experiencia única.'},
+                        ]
+                    },
+                    { 
+                        pillar: 'Potenciación de Estrategia Comercial', 
+                        icon: '📈',
+                        description: 'La IA puede proporcionar una comprensión sin precedentes del mercado y de los clientes.',
+                        sub_items: [
+                            { title: 'Inteligencia de Ventas y Marketing', detail: 'Implementar CRM potenciados por IA para una calificación de leads más precisa y campañas de marketing personalizadas y eficientes.'},
+                            { title: 'Análisis de Voz del Cliente', detail: 'Desplegar modelos de PLN para analizar en tiempo real los comentarios de clientes en redes sociales, encuestas y tickets de soporte.'},
+                        ]
+                    }
+                ]
+            },
+            hoja: {
+                title: 'Una Hoja de Ruta para la Implementación',
+                intro: 'La adopción de la IA debe ser un proceso gradual y meditado. El siguiente diagrama de tiempo visualiza nuestro enfoque propuesto en tres fases. Interactúe con el gráfico o los botones para explorar los objetivos y acciones de cada etapa.',
+                phases: [
+                    { name: 'Fase 1: Fundación y Pilotos', duration: '6-9 meses', content: 'El objetivo es construir las bases y demostrar valor rápidamente. Esto incluye formar un comité de IA, evaluar la infraestructura de datos y ejecutar 1-2 proyectos piloto de alto impacto y baja complejidad, como un chatbot interno para RR.HH. o la automatización de la clasificación de tickets de soporte.' },
+                    { name: 'Fase 2: Expansión y Escalamiento', duration: '10-24 meses', content: 'Con los aprendizajes de los pilotos, se escalan las soluciones exitosas a otros departamentos. Se invierte en proyectos más ambiciosos, como integrar funcionalidades predictivas en un producto clave. La formación en "alfabetización de IA" se extiende a toda la empresa.' },
+                    { name: 'Fase 3: Transformación Cultural', duration: '24+ meses', content: 'La IA deja de ser un proyecto para convertirse en parte del ADN de Lisotosoft. La empresa no solo utiliza IA, sino que "piensa" con IA. El enfoque se desplaza hacia la creación de nuevos modelos de negocio y productos disruptivos basados en esta tecnología.' }
+                ]
+            },
+            consideraciones: {
+                title: 'Desafíos y Consideraciones Éticas',
+                intro: 'Una implementación exitosa debe ser también responsable. Lisotosoft S.A. deberá abordar proactivamente los siguientes desafíos para asegurar un crecimiento sostenible y ético. Expanda cada sección para conocer los detalles.',
+                items: [
+                    { title: 'Privacidad y Seguridad de los Datos', content: 'Es crucial reforzar las políticas de gobernanza de datos para garantizar que toda la información utilizada por los sistemas de IA se maneje con los más altos estándares de seguridad y cumplimiento normativo, protegiendo tanto a la empresa como a sus clientes.' },
+                    { title: 'Sesgo y Equidad', content: 'Se deben auditar constantemente los algoritmos para detectar y mitigar posibles sesgos (de género, raciales, etc.) que puedan perpetuar desigualdades, especialmente en áreas sensibles como la contratación o la evaluación de personal.' },
+                    { title: 'Impacto en la Fuerza Laboral', content: 'Abordar de frente el temor al desplazamiento laboral. La estrategia debe centrarse en la **aumentación** de las capacidades humanas, no en su reemplazo. Esto implica un compromiso firme con la recualificación (reskilling) y la mejora de las competencias (upskilling) de los empleados.' }
+                ]
+            }
+        };
+
+        const contentArea = document.getElementById('content-area');
+        let timelineChart = null;
+
+        function renderVision() {
+            contentArea.innerHTML = `
+                <div class="max-w-4xl mx-auto animate-fade-in">
+                    ${contentData.vision.content}
+                </div>
+            `;
+        }
+
+        function renderPilares() {
+            let pillarHTML = contentData.pilares.items.map(p => `
+                <div class="bg-white rounded-lg shadow-md p-6 flex flex-col card">
+                    <div class="text-4xl mb-4">${p.icon}</div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">${p.pillar}</h3>
+                    <p class="text-gray-600 mb-4 flex-grow">${p.description}</p>
+                    <div class="space-y-2">
+                        ${p.sub_items.map(sub => `<button class="w-full text-left p-2 rounded-md bg-gray-100 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 pillar-sub-item" data-detail="${sub.detail}">${sub.title}</button>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            contentArea.innerHTML = `
+                <div class="text-center mb-8 max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-2">${contentData.pilares.title}</h2>
+                    <p class="text-lg text-gray-600">${contentData.pilares.intro}</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    ${pillarHTML}
+                </div>
+                <div id="pillar-detail-area" class="mt-8 p-6 bg-blue-50 rounded-lg min-h-[100px] text-lg text-blue-900 flex items-center justify-center transition-opacity duration-500 opacity-0">
+                    <p>Seleccione una iniciativa para ver los detalles.</p>
+                </div>
+            `;
+            
+            document.querySelectorAll('.pillar-sub-item').forEach(button => {
+                button.addEventListener('click', () => {
+                    const detailArea = document.getElementById('pillar-detail-area');
+                    detailArea.innerHTML = `<p>${button.dataset.detail}</p>`;
+                    detailArea.style.opacity = 1;
+                    
+                    document.querySelectorAll('.pillar-sub-item').forEach(btn => btn.classList.remove('bg-blue-200'));
+                    button.classList.add('bg-blue-200');
+                });
+            });
+        }
+        
+        function renderHoja() {
+            contentArea.innerHTML = `
+                <div class="text-center mb-8 max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-2">${contentData.hoja.title}</h2>
+                    <p class="text-lg text-gray-600">${contentData.hoja.intro}</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="chart-container">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                     <div class="flex justify-center mt-6 space-x-4">
+                        ${contentData.hoja.phases.map((phase, index) => `
+                            <button class="phase-button px-4 py-2 rounded-md bg-gray-200 hover:bg-blue-500 hover:text-white transition" data-index="${index}">${phase.name}</button>
+                        `).join('')}
+                    </div>
+                    <div id="phase-detail-area" class="mt-6 p-6 bg-gray-50 rounded-lg min-h-[120px]">
+                        <p class="text-gray-500 text-center">Haga clic en una fase en el gráfico o un botón para ver su descripción.</p>
+                    </div>
+                </div>
+            `;
+            createTimelineChart();
+            
+            document.querySelectorAll('.phase-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    updatePhaseDetails(index);
+                });
+            });
+        }
+
+        function createTimelineChart() {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            const data = {
+                labels: ['Fase 1 (0-9m)', 'Fase 2 (10-24m)', 'Fase 3 (24m+)'],
+                datasets: [{
+                    label: 'Duración en Meses',
+                    data: [
+                        [0, 9],
+                        [9, 24],
+                        [24, 36] 
+                    ],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.7)',
+                        'rgba(16, 185, 129, 0.7)',
+                        'rgba(249, 115, 22, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(16, 185, 129, 1)',
+                        'rgba(249, 115, 22, 1)'
+                    ],
+                    borderWidth: 1,
+                    barPercentage: 0.5,
+                }]
+            };
+
+            const options = {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Meses desde el Inicio'
+                        },
+                        max: 40
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.dataset.label}: Mes ${context.raw[0]} a ${context.raw[1]}`;
+                            }
+                        }
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        updatePhaseDetails(index);
+                    }
+                }
+            };
+
+            if (timelineChart) {
+                timelineChart.destroy();
+            }
+            timelineChart = new Chart(ctx, { type: 'bar', data: data, options: options });
+        }
+        
+        function updatePhaseDetails(index) {
+            const phase = contentData.hoja.phases[index];
+            const detailArea = document.getElementById('phase-detail-area');
+            detailArea.innerHTML = `
+                <h3 class="text-xl font-bold text-blue-600 mb-2">${phase.name}</h3>
+                <p class="font-semibold text-gray-600 mb-3">Duración estimada: ${phase.duration}</p>
+                <p class="text-gray-700 leading-relaxed">${phase.content}</p>
+            `;
+            
+            document.querySelectorAll('.phase-button').forEach((btn, i) => {
+                btn.classList.toggle('bg-blue-500', i === index);
+                btn.classList.toggle('text-white', i === index);
+                btn.classList.toggle('bg-gray-200', i !== index);
+            });
+
+            // Highlight bar in chart
+            timelineChart.data.datasets[0].borderColor = timelineChart.data.datasets[0].borderColor.map((color, i) => i === index ? '#000000' : options.data.datasets[0].borderColor[i]);
+            timelineChart.data.datasets[0].borderWidth = timelineChart.data.datasets[0].borderWidth.map((width, i) => i === index ? 3 : 1);
+            timelineChart.update();
+        }
+
+        function renderConsideraciones() {
+            contentArea.innerHTML = `
+                <div class="text-center mb-8 max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-2">${contentData.consideraciones.title}</h2>
+                    <p class="text-lg text-gray-600">${contentData.consideraciones.intro}</p>
+                </div>
+                <div class="max-w-3xl mx-auto space-y-4" id="accordion-container">
+                    ${contentData.consideraciones.items.map((item, index) => `
+                        <div class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+                            <button class="accordion-header w-full flex justify-between items-center p-5 text-left font-semibold text-lg hover:bg-gray-50 focus:outline-none">
+                                <span>${item.title}</span>
+                                <span class="accordion-icon transform rotate-0 transition-transform duration-300">&#9662;</span>
+                            </button>
+                            <div class="accordion-content">
+                                <p class="p-5 pt-0 text-gray-700 leading-relaxed">${item.content}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            const accordionContainer = document.getElementById('accordion-container');
+            accordionContainer.addEventListener('click', e => {
+                const header = e.target.closest('.accordion-header');
+                if (!header) return;
+
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.accordion-icon');
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+                // Close all others
+                accordionContainer.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = '0px');
+                accordionContainer.querySelectorAll('.accordion-icon').forEach(el => el.style.transform = 'rotate(0deg)');
+
+                if (!isOpen) {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        }
+        
+        function navigate(view) {
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.toggle('active', button.dataset.view === view);
+            });
+            switch (view) {
+                case 'vision':
+                    renderVision();
+                    break;
+                case 'pilares':
+                    renderPilares();
+                    break;
+                case 'hoja':
+                    renderHoja();
+                    break;
+                case 'consideraciones':
+                    renderConsideraciones();
+                    break;
+                default:
+                    renderVision();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('nav').addEventListener('click', (e) => {
+                if (e.target.matches('.nav-button')) {
+                    navigate(e.target.dataset.view);
+                }
+            });
+            navigate('vision');
+        });
+    </script>
+</body>
+</html>
